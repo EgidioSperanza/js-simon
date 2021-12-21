@@ -19,7 +19,7 @@ button {
   background-color: steelblue;
   margin-top: 20px;
 }
-.pc_number {
+.game_number {
   display: inline-block;
   width: 50px;
   height: 50px;
@@ -28,7 +28,10 @@ button {
   text-align: center;
   border: 1px solid #000;
 }
-
-.hide {
-  display: none;
+.game_number.clickable{
+    cursor: pointer;
 }
+.game_number.clickable:hover{
+    background-color: cornflowerblue;
+}
+

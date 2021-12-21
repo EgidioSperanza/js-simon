@@ -14,71 +14,103 @@ function computerNum() {
   return numbers;
 }
 
-//Creo i 5 box contenenti i random dell'array
-function showPcNum(pcNumFunction, container) {
-  let pcNum = pcNumFunction();
-  console.log(pcNum); //DEBUG
-  for (let i = 0; i < pcNum.length; i++) {
-    const box = document.createElement("div");
-    container.append(box);
-    box.innerText = pcNum[i];
-    box.className = "pc_number";
-  }
-  container.innerHTML += "<h1>Memorizza i numeri e l'ordine</h1>";
-  return pcNum;
-}
-//Creo i 9 box pulsanti numerati per la risposta utente
-function userChoiceNum(container, toCompareArr) {
+function simonGame() {
+  const pcRandom = computerNum();
   const userNum = [];
-  for (let i = 1; i <= 9; i++) {
-    const box = document.createElement("div");
-    container.append(box);
-    box.innerText = i;
-    box.className = "pc_number";
-  }
-  container.innerHTML +=
-    "<h1>Clicca sui numeri nell'ordine che hai memorizzato</h1>";
 
-  for (let i = 0; i < container.childElementCount - 1; i++) {
-    container.children.item(i).addEventListener("click", function () {
-      console.log(i + 1); //DEBUG
-      if (userNum.length < 5) {
-        userNum.push(i + 1);
-      } else {
-        console.log(userNum); //DEBUG
-        compareArr(toCompareArr, userNum);
-      }
-    });
+  for (let i = 0; i < pcRandom.length; i++) {
+    const numBox = document.createElement("div");
+    numBox.className = "game_number";
+    numBox.innerText = pcRandom[i];
+    containerGame.append(numBox);
   }
-}
+  containerGame.innerHTML +=
+    "<h1>Memorizza la sequenza di numeri e non trascurare il loro ordine!</h1>";
 
-//compariamo gli array
-function compareArr(firstArray, secondArray) {
-  if (firstArray == secondArray) {
-    container.innerHTML =
-      "<h1>Perfetto! Hai memorizzato perfettamente la sequenza di numeri</h1>";
-  }
-}
-
-//mostro i numeri dell'array per 30 secondi
-function simonGame(showPcNumFunction, userChoiceFunction) {
-  const pcArr = showPcNumFunction(computerNum, gameBox);
+  const userArr = [];
   setTimeout(function () {
-    gameBox.innerHTML = ""; //Creo la scelta utente
-    userChoiceFunction(gameBox, pcArr);
-  }, 1000);
+    containerGame.innerHTML = "";
+    for (let i = 1; i <= 9; i++) {
+      const numBox = document.createElement("div");
+      numBox.className = "game_number";
+      numBox.classList.add("clickable");
+      numBox.innerText = i;
+      containerGame.append(numBox);
+    }
+    containerGame.innerHTML +=
+      "<h1>Clicca sui numeri nell'ordine che sei riuscito a memorizzare poco fa.</h1>";
+
+    const limits = containerGame.childElementCount - 1; //Togliamo il Messaggio
+    let click = 0;
+    for (let i = 0; i < limits; i++) {
+      containerGame.children.item(i).addEventListener("click", function () {
+        console.log(i + 1); //DEBUG
+        console.log(click + "click");
+        click++;
+        console.log(click + "click");
+        if (click < 5) {
+          userArr.push(i + 1);
+        } else {
+          userArr.push(i + 1);
+          console.log(userArr);
+          containerGame.innerHTML = "";
+          for (let i = 0; i < userArr.length; i++) {
+            const numBox = document.createElement("div");
+            numBox.className = "game_number";
+            numBox.innerText = userArr[i];
+            containerGame.append(numBox);
+          }
+          containerGame.innerHTML +=
+            "<h1>Ecco i numeri che hai memorizzato</h1>";
+            let counter=0;
+            let include=0;
+            let comparePosition=[];
+            let compareInclusive=[];
+            for(let i=0; i<pcRandom.length; i++){
+                if(pcRandom[i]===userArr[i]){
+                    counter++;
+                    comparePosition.push(pcRandom[i]);
+                }else{
+                    comparePosition.push("x");
+                }
+                if(pcRandom.includes(userArr[i])){
+                    include++;
+                    compareInclusive.push(userArr[i])
+                }else{
+                    compareInclusive.push("x");
+                }
+            }
+            if (counter===pcRandom.length && counter===include){
+                containerGame.innerHTML +=
+                "<h1>Bravo hai memorizzato perfettamente la sequenza</h1>";
+            }else if(include===pcRandom.length && counter>0){
+                containerGame.innerHTML += `<h1>Hai memorizzato tutti i numeri della sequenza ma la posizione è giusta solo per ${comparePosition}</h1>`;
+            }else if(include===pcRandom.length && counter===0 ){
+                containerGame.innerHTML += `<h1>Hai memorizzato tutti numeri della sequenza ma nessunodi essi è stato posizionato correttamente. La sequenza giusta era ${pcRandom}</h1>`;
+            }else if (include===0){
+                containerGame.innerHTML+= `<h1>Come hai fatto non lo so, epppure non hai memorizzato nessun numero della sequenza che era ${pcRandom}</h1>`;
+            }else{
+                containerGame.innerHTML+= `<h1>Hai memorizzato ${include} numeri della sequenza Disponendone bene ${counter} di essi.<br />
+                la Sequenza corretta era ${pcRandom}</h1>`;
+            }
+            const btn = document.createElement("button")
+            containerGame.append(btn);
+            btn.className="reset";
+            btn.textContent="Gioca!";
+            btn.addEventListener("click", function(){
+                containerGame.innerHTML="";
+                simonGame();
+            })
+        }
+      });
+    }
+  }, 3000);
 }
 
-function compareGameNum(container, pcNum, userNum) {
-  if (pcNum === userNum) {
-    container.innerHTML =
-      "<p>Perfetto! Hai memorizzato la sequenza di numeri </p>";
-  }
-}
-const gameBox = document.getElementById("game");
-const play = document.getElementById("play");
+const containerGame = document.getElementById("game");
+const play = document.querySelector(".play");
 
-play.addEventListener("click", function () {
-  gameBox.innerHTML = "";
-  simonGame(showPcNum, userChoiceNum);
+play.addEventListener("click", function() {
+  containerGame.innerHTML = "";
+  simonGame();
 });
