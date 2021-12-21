@@ -63,10 +63,10 @@ function nextSequence() {
   let randomNumber = Math.floor(Math.random() * 4);
   let randomChosenColour = buttonColours[randomNumber];
   gamePattern.push(randomChosenColour);
-  //DA CAPIRE MEGLIO
-  $("#" + randomChosenColour)
-    .fadeOut(100)
-    .fadeIn(100);
+  document.getElementById(randomChosenColour).classList.add("fade_in");
+  setTimeout(function () {
+    document.getElementById(randomChosenColour).classList.remove("fade_in");
+  }, 100);
   playSound(randomChosenColour);
 }
 
@@ -78,7 +78,7 @@ function playSound(name) {
 
 //Press button Animation
 function animatePress(currentColor) {
-  const currentColor = document.getElementById(currentColor);
+  currentColor = document.getElementById(currentColor);
   currentColor.classList.add("pressed");
   setTimeout(function () {
     currentColor.classList.remove("pressed");
