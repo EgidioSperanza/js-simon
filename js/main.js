@@ -9,7 +9,7 @@ function computerNum() {
   const numbers = [];
   while (numbers.length < qtyNum) {
     const randomNum = getRandomNumber(min, max);
-      numbers.push(randomNum);
+    numbers.push(randomNum);
   }
   return numbers;
 }
@@ -24,38 +24,61 @@ function showPcNum(pcNumFunction, container) {
     box.innerText = pcNum[i];
     box.className = "pc_number";
   }
-    container.innerHTML += "<h1>Memorizza i numeri e l'ordine</h1>";
+  container.innerHTML += "<h1>Memorizza i numeri e l'ordine</h1>";
+  return pcNum;
 }
 //Creo i 9 box pulsanti numerati per la risposta utente
-function userChoiceNum(container) {
-    const userArr=[]
+function userChoiceNum(container, toCompareArr) {
+  const userNum = [];
   for (let i = 1; i <= 9; i++) {
     const box = document.createElement("div");
     container.append(box);
     box.innerText = i;
     box.className = "pc_number";
   }
-  for (let i=0; i<=container.childElementCount; i++){
-    container.children.item(i).addEventListener("click", function(){
-        console.log(i+1);
-    })
-  }
-  container.innerHTML += "<h1>Clicca sui numeri nell'ordine che hai memorizzato</h1>";
+  container.innerHTML +=
+    "<h1>Clicca sui numeri nell'ordine che hai memorizzato</h1>";
 
+  for (let i = 0; i < container.childElementCount - 1; i++) {
+    container.children.item(i).addEventListener("click", function () {
+      console.log(i + 1); //DEBUG
+      if (userNum.length < 5) {
+        userNum.push(i + 1);
+      } else {
+        console.log(userNum); //DEBUG
+        compareArr(toCompareArr, userNum);
+      }
+    });
+  }
 }
+
+//compariamo gli array
+function compareArr(firstArray, secondArray) {
+  if (firstArray == secondArray) {
+    container.innerHTML =
+      "<h1>Perfetto! Hai memorizzato perfettamente la sequenza di numeri</h1>";
+  }
+}
+
 //mostro i numeri dell'array per 30 secondi
 function simonGame(showPcNumFunction, userChoiceFunction) {
-  showPcNumFunction(computerNum, gameBox);
+  const pcArr = showPcNumFunction(computerNum, gameBox);
   setTimeout(function () {
-    gameBox.innerHTML = "";//Creo la scelta utente
-    userChoiceFunction(gameBox);
-
+    gameBox.innerHTML = ""; //Creo la scelta utente
+    userChoiceFunction(gameBox, pcArr);
   }, 1000);
+}
+
+function compareGameNum(container, pcNum, userNum) {
+  if (pcNum === userNum) {
+    container.innerHTML =
+      "<p>Perfetto! Hai memorizzato la sequenza di numeri </p>";
+  }
 }
 const gameBox = document.getElementById("game");
 const play = document.getElementById("play");
 
-play.addEventListener("click", function (){
-    gameBox.innerHTML="";
-    simonGame(showPcNum, userChoiceNum);
-})
+play.addEventListener("click", function () {
+  gameBox.innerHTML = "";
+  simonGame(showPcNum, userChoiceNum);
+});
