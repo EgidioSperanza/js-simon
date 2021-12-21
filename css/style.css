@@ -3,21 +3,37 @@
   padding: 0;
   box-sizing: border-box;
 }
+a:link,
+a:visited,
+a:hover {
+  color: #fff;
+}
 .container > h1 {
   text-align: center;
   padding: 25px;
   background-color: cadetblue;
   margin-bottom: 25px;
+  position: relative;
 }
 #game {
   text-align: center;
   margin: 0 auto;
+}
+.bonus {
+  position: absolute;
+  padding: 50px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
 }
 button {
   padding: 10px;
   border-radius: 5px;
   background-color: steelblue;
   margin-top: 20px;
+  color: #fff;
+  text-decoration: underline;
 }
 .game_number {
   display: inline-block;
@@ -28,10 +44,9 @@ button {
   text-align: center;
   border: 1px solid #000;
 }
-.game_number.clickable{
-    cursor: pointer;
+.game_number.clickable {
+  cursor: pointer;
 }
-.game_number.clickable:hover{
-    background-color: cornflowerblue;
+.game_number.clickable:hover {
+  background-color: cornflowerblue;
 }
-
