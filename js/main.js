@@ -33,6 +33,40 @@ function createBoxUserNum(max) {
   }
 }
 
+function compareSequence(arr, arr2) {
+  let counter = 0;
+  let included = 0;
+  let comparePosition = [];
+  let compareInclusive = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === arr2[i]) {
+      counter++;
+      comparePosition.push(arr[i]);
+    } else {
+      comparePosition.push("x");
+    }
+    if (arr.includes(arr2[i])) {
+      included++;
+      compareInclusive.push(arr2[i]);
+    } else {
+      compareInclusive.push("x");
+    }
+  }
+  if (counter === arr.length && counter === included) {
+    containerGame.innerHTML +=
+      "<h1>Bravo hai memorizzato perfettamente la sequenza</h1>";
+  } else if (included === arr.length && counter > 0) {
+    containerGame.innerHTML += `<h1>Hai memorizzato tutti i numeri della sequenza ma la posizione è giusta solo per ${comparePosition}</h1>`;
+  } else if (included === arr.length && counter === 0) {
+    containerGame.innerHTML += `<h1>Hai memorizzato tutti numeri della sequenza ma nessunodi essi è stato posizionato correttamente. La sequenza giusta era ${pcRandom}</h1>`;
+  } else if (included === 0) {
+    containerGame.innerHTML += `<h1>Come hai fatto non lo so, epppure non hai memorizzato nessun numero della sequenza che era ${pcRandom}</h1>`;
+  } else {
+    containerGame.innerHTML += `<h1>Hai memorizzato ${included} numeri della sequenza Disponendone bene ${counter} di essi.<br />
+        la Sequenza corretta era ${arr}</h1>`;
+  }
+}
+
 function simonGame() {
   const pcRandom = computerNum();
   const userNum = [];
@@ -64,45 +98,9 @@ function simonGame() {
           createBoxNum(userArr.length, userArr);
           containerGame.innerHTML +=
             "<h1>Ecco i numeri che hai memorizzato</h1>";
-          let counter = 0;
-          let included = 0;
-          let comparePosition = [];
-          let compareInclusive = [];
-          for (let i = 0; i < pcRandom.length; i++) {
-            if (pcRandom[i] === userArr[i]) {
-              counter++;
-              comparePosition.push(pcRandom[i]);
-            } else {
-              comparePosition.push("x");
-            }
-            if (pcRandom.includes(userArr[i])) {
-              included++;
-              compareInclusive.push(userArr[i]);
-            } else {
-              compareInclusive.push("x");
-            }
-          }
-          // console.log(counter, included);
-          // console.log(compareInclusive);
-          // console.log(comparePosition);
-          if (counter === pcRandom.length && counter === included) {
-            containerGame.innerHTML +=
-              "<h1>Bravo hai memorizzato perfettamente la sequenza</h1>";
-          } else if (included === pcRandom.length && counter > 0) {
-            containerGame.innerHTML += `<h1>Hai memorizzato tutti i numeri della sequenza ma la posizione è giusta solo per ${comparePosition}</h1>`;
-          } else if (included === pcRandom.length && counter === 0) {
-            containerGame.innerHTML += `<h1>Hai memorizzato tutti numeri della sequenza ma nessunodi essi è stato posizionato correttamente. La sequenza giusta era ${pcRandom}</h1>`;
-          } else if (included === 0) {
-            containerGame.innerHTML += `<h1>Come hai fatto non lo so, epppure non hai memorizzato nessun numero della sequenza che era ${pcRandom}</h1>`;
-          } else {
-            containerGame.innerHTML += `<h1>Hai memorizzato ${included} numeri della sequenza Disponendone bene ${counter} di essi.<br />
-                la Sequenza corretta era ${pcRandom}</h1>`;
-          }
-          const btn = document.createElement("button");
-          containerGame.append(btn);
-          btn.className = "reset";
-          btn.textContent = "Gioca!";
-          startGame(btn);
+
+          compareSequence(pcRandom, userArr);
+          resetGame(containerGame);
         }
       });
     }
@@ -114,6 +112,14 @@ function startGame(button) {
     containerGame.innerHTML = "";
     simonGame();
   });
+}
+
+function resetGame(container) {
+  const btn = document.createElement("button");
+  container.append(btn);
+  btn.className = "reset";
+  btn.textContent = "Gioca!";
+  startGame(btn);
 }
 
 const containerGame = document.getElementById("game");
