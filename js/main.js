@@ -33,30 +33,6 @@ function createBoxUserNum(max) {
   }
 }
 
-function compareSequence(
-  arr,
-  arr2,
-  compareArr,
-  includeArr,
-  iCompare,
-  iInclude
-) {
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] === arr2[i]) {
-      iCompare++;
-      compareArr.push(arr[i]);
-    } else {
-      compareArr.push("x");
-    }
-    if (arr.includes(arr2[i])) {
-      iInclude++;
-      includeArr.push(arr2[i]);
-    } else {
-      includeArr.push("x");
-    }
-  }
-}
-
 function simonGame() {
   const pcRandom = computerNum();
   const userNum = [];
@@ -89,28 +65,33 @@ function simonGame() {
           containerGame.innerHTML +=
             "<h1>Ecco i numeri che hai memorizzato</h1>";
           let counter = 0;
-          let include = 0;
+          let included = 0;
           let comparePosition = [];
           let compareInclusive = [];
-          compareSequence(
-            pcRandom,
-            userArr,
-            comparePosition,
-            compareInclusive,
-            counter,
-            include
-          );
-          if (counter === pcRandom.length && counter === include) {
+          for (let i = 0; i < pcRandom.length; i++) {
+            if (pcRandom[i] === userArr[i]) {
+              counter++;
+              comparePosition.push(pcRandom[i]);
+            }
+            if (pcRandom.includes(userArr[i])) {
+              included++;
+              compareInclusive.push(userArr[i]);
+            }
+          }
+          console.log(counter,included)
+          console.log(compareInclusive)
+          console.log(comparePosition)
+                  if (counter === pcRandom.length && counter === included) {
             containerGame.innerHTML +=
               "<h1>Bravo hai memorizzato perfettamente la sequenza</h1>";
-          } else if (include === pcRandom.length && counter > 0) {
+          } else if (included === pcRandom.length && counter > 0) {
             containerGame.innerHTML += `<h1>Hai memorizzato tutti i numeri della sequenza ma la posizione è giusta solo per ${comparePosition}</h1>`;
-          } else if (include === pcRandom.length && counter === 0) {
+          } else if (included === pcRandom.length && counter === 0) {
             containerGame.innerHTML += `<h1>Hai memorizzato tutti numeri della sequenza ma nessunodi essi è stato posizionato correttamente. La sequenza giusta era ${pcRandom}</h1>`;
-          } else if (include === 0) {
+          } else if (included === 0) {
             containerGame.innerHTML += `<h1>Come hai fatto non lo so, epppure non hai memorizzato nessun numero della sequenza che era ${pcRandom}</h1>`;
           } else {
-            containerGame.innerHTML += `<h1>Hai memorizzato ${include} numeri della sequenza Disponendone bene ${counter} di essi.<br />
+            containerGame.innerHTML += `<h1>Hai memorizzato ${included} numeri della sequenza Disponendone bene ${counter} di essi.<br />
                 la Sequenza corretta era ${pcRandom}</h1>`;
           }
           const btn = document.createElement("button");
@@ -121,7 +102,7 @@ function simonGame() {
         }
       });
     }
-  }, 30000);
+  }, 3000);
 }
 
 function startGame(button) {
