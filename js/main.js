@@ -121,7 +121,7 @@ function simonGame() {
         }
       });
     }
-  }, 3000);
+  }, 30000);
 }
 
 function startGame(button) {
