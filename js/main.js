@@ -72,16 +72,20 @@ function simonGame() {
             if (pcRandom[i] === userArr[i]) {
               counter++;
               comparePosition.push(pcRandom[i]);
+            } else {
+              comparePosition.push("x");
             }
             if (pcRandom.includes(userArr[i])) {
               included++;
               compareInclusive.push(userArr[i]);
+            } else {
+              compareInclusive.push("x");
             }
           }
-          console.log(counter,included)
-          console.log(compareInclusive)
-          console.log(comparePosition)
-                  if (counter === pcRandom.length && counter === included) {
+          // console.log(counter, included);
+          // console.log(compareInclusive);
+          // console.log(comparePosition);
+          if (counter === pcRandom.length && counter === included) {
             containerGame.innerHTML +=
               "<h1>Bravo hai memorizzato perfettamente la sequenza</h1>";
           } else if (included === pcRandom.length && counter > 0) {
